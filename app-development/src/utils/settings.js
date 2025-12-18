@@ -1,10 +1,6 @@
-// src/utils/settings.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 
-// -------------------- AsyncStorage --------------------
-
-// Save user settings
 export const saveSettings = async ({ region, schoolYear }) => {
   try {
     await AsyncStorage.setItem('userRegion', region);
@@ -14,7 +10,6 @@ export const saveSettings = async ({ region, schoolYear }) => {
   }
 };
 
-// Load user settings
 export const loadSettings = async () => {
   try {
     const region = await AsyncStorage.getItem('userRegion');
@@ -32,12 +27,11 @@ export const loadSettings = async () => {
 export const getDefaultRegion = async () => {
   try {
     const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') return 'midden'; // fallback
+    if (status !== 'granted') return 'midden'; 
 
     const location = await Location.getCurrentPositionAsync({});
     const { latitude } = location.coords;
 
-    // Simple bounding boxes for NL regions
     if (latitude > 52.5) return 'noord';
     if (latitude > 51.5) return 'midden';
     return 'zuid';
@@ -47,7 +41,6 @@ export const getDefaultRegion = async () => {
   }
 };
 
-// Get default school year
 export const getDefaultSchoolYear = () => {
   const now = new Date();
   const startYear = now.getFullYear();

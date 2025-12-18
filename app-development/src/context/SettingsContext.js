@@ -1,5 +1,4 @@
-// src/context/SettingsContext.js
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { loadSettings, getDefaultRegion, getDefaultSchoolYear } from '../utils/settings';
 
 export const SettingsContext = createContext();

@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { View, Text, ScrollView, StyleSheet, useWindowDimensions } from "react-native";
 import Layout from "../components/Layout";
 import { SettingsContext } from "../context/SettingsContext";
+import capitalizeFirstLetter from "../utils/capitalizeFirst"; 
 
 export default function OverzichtScreen() {
   const { region, schoolYear, loaded } = useContext(SettingsContext);
@@ -25,7 +26,6 @@ export default function OverzichtScreen() {
         const data = await res.json();
         const content = data.content?.[0]?.vacations || [];
 
-        // Filter vacations for user region or 'heel Nederland'
         const filtered = content
           .map((vacation) => {
             const regionsFiltered = vacation.regions.filter((r) => {
@@ -56,7 +56,7 @@ export default function OverzichtScreen() {
           { paddingTop: isLandscape ? 16 : 80 },
         ]}
       >
-        <Text style={styles.header}>Schoolvakanties {schoolYear}</Text>
+        <Text style={styles.header}>Schoolvakanties {capitalizeFirstLetter(region)} {schoolYear}</Text>
 
         {loading && <Text>Loading...</Text>}
         {error && <Text style={styles.error}>{error}</Text>}
@@ -66,7 +66,7 @@ export default function OverzichtScreen() {
             <Text style={styles.cardTitle}>{item.type.trim()}</Text>
             {item.regions.map((r, i) => (
               <Text key={i} style={styles.periodText}>
-                {`${r.region.trim()}: ${new Date(r.startdate).toLocaleDateString()} → ${new Date(
+                {`${capitalizeFirstLetter(r.region.trim())}: ${new Date(r.startdate).toLocaleDateString()} → ${new Date(
                   r.enddate
                 ).toLocaleDateString()}`}
               </Text>

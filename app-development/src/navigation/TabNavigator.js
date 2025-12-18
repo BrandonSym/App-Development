@@ -1,5 +1,3 @@
-// src/navigation/TabNavigator.js
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import OverzichtScreen from "../screens/OverzichtScreen";
 import CountdownScreen from "../screens/CountdownScreen";
@@ -13,7 +11,7 @@ export default function TabNavigator() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: { display: "none" }, // hide default tab bar
+        tabBarStyle: { display: "none" },
       }}
     >
       <Tab.Screen name="Overzicht" component={OverzichtScreen} />

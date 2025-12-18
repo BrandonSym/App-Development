@@ -1,5 +1,3 @@
-// src/components/Layout.js
-import React from "react";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import ResponsiveNavbar from "./ResponsiveNavbar";
@@ -26,7 +24,6 @@ export default function Layout({ children }) {
         {children}
       </View>
 
-      {/* Render the navbar on top of everything */}
       <ResponsiveNavbar />
     </SafeAreaView>
   );

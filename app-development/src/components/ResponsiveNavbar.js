@@ -1,15 +1,12 @@
 // src/components/ResponsiveNavbar.js
-import React from "react";
 import {
-  View,
   Text,
   StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
-import { SafeAreaView } from "react-native-safe-area-context"; // install this library
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ResponsiveNavbar() {
   const { width, height } = useWindowDimensions();
@@ -20,7 +17,7 @@ export default function ResponsiveNavbar() {
 
   return (
     <SafeAreaView
-      edges={["bottom", "left", "right"]} // respect bottom safe area
+      edges={["bottom", "left", "right"]}
       style={[
         styles.navbar,
         isLandscape ? styles.navbarLandscape : styles.navbarPortrait,
@@ -57,7 +54,7 @@ const styles = StyleSheet.create({
   },
   navbarLandscape: {
     top: 0,
-    width: 140, // slightly wider for text
+    width: 150,
     height: "100%",
     flexDirection: "column",
     alignItems: "center",

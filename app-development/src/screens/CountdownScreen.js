@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, useWindowDimensions, ScrollView } from "react-native";
 import Layout from "../components/Layout";
 import { SettingsContext } from "../context/SettingsContext";
 import capitalizeFirstLetter from "../utils/capitalizeFirst";
-// Map vacation types to local images
+
 const vacationImages = {
   Zomervakantie: require("../assets/vacations/summer.jpg"),
   Herfstvakantie: require("../assets/vacations/autumn.jpg"),
@@ -17,6 +17,9 @@ export default function CountdownScreen() {
   const [nextVacation, setNextVacation] = useState(null);
   const [daysLeft, setDaysLeft] = useState(null);
   const [error, setError] = useState(null);
+
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
 
   useEffect(() => {
     if (!loaded) return;
@@ -48,7 +51,6 @@ export default function CountdownScreen() {
             }))
           );
 
-        // Find next upcoming vacation
         const today = new Date();
         const upcoming = regionVacations
           .filter((v) => v.startdate >= today)
@@ -83,31 +85,62 @@ export default function CountdownScreen() {
         <Text style={styles.header}>Countdown to Next Vacation</Text>
         {error && <Text style={styles.error}>{error}</Text>}
 
-        {nextVacation ? (
-          <View style={styles.card}>
-            <Image
-              source={vacationImages[nextVacation.type]}
-              style={styles.vacationImage}
-              resizeMode="cover"
-            />
-            <Text style={styles.cardTitle}>
-              {nextVacation.type} {capitalizeFirstLetter(region)}
-            </Text>
-            <Text style={styles.periodText}>
-              {`Start: ${nextVacation.startdate.toLocaleDateString()}`}
-            </Text>
-            <Text style={styles.periodText}>
-              {`End: ${nextVacation.enddate.toLocaleDateString()}`}
-            </Text>
-            <Text style={styles.countdown}>{`${daysLeft} day${
-              daysLeft !== 1 ? "s" : ""
-            } left`}</Text>
-          </View>
-        ) : (
-          <Text style={styles.noVacation}>
-            No upcoming vacation found for your region.
-          </Text>
-        )}
+{nextVacation ? (
+  <View
+    style={[
+      styles.card,
+      isLandscape ? styles.cardLandscape : styles.cardPortrait,
+    ]}
+  >
+    <Image
+      source={vacationImages[nextVacation.type]}
+      style={[
+        styles.vacationImage,
+        isLandscape ? styles.imageLandscape : styles.imagePortrait,
+      ]}
+      resizeMode="cover"
+    />
+    {isLandscape ? (
+      <ScrollView
+        style={styles.textScroll}
+        contentContainerStyle={{ paddingLeft: 16 }}
+      >
+        <Text style={styles.cardTitle}>
+          {nextVacation.type} {capitalizeFirstLetter(region)}
+        </Text>
+        <Text style={styles.periodText}>
+          {`Start: ${nextVacation.startdate.toLocaleDateString()}`}
+        </Text>
+        <Text style={styles.periodText}>
+          {`End: ${nextVacation.enddate.toLocaleDateString()}`}
+        </Text>
+        <Text style={styles.countdown}>{`${daysLeft} day${
+          daysLeft !== 1 ? "s" : ""
+        } left`}</Text>
+      </ScrollView>
+    ) : (
+      <View style={{ flex: 1 }}>
+        <Text style={styles.cardTitle}>
+          {nextVacation.type} {capitalizeFirstLetter(region)}
+        </Text>
+        <Text style={styles.periodText}>
+          {`Start: ${nextVacation.startdate.toLocaleDateString()}`}
+        </Text>
+        <Text style={styles.periodText}>
+          {`End: ${nextVacation.enddate.toLocaleDateString()}`}
+        </Text>
+        <Text style={styles.countdown}>{`${daysLeft} day${
+          daysLeft !== 1 ? "s" : ""
+        } left`}</Text>
+      </View>
+    )}
+  </View>
+) : (
+  <Text style={styles.noVacation}>
+    No upcoming vacation found for your region.
+  </Text>
+)}
+
       </ScrollView>
     </Layout>
   );
@@ -115,9 +148,8 @@ export default function CountdownScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 16,
-    paddingTop: 80,
   },
   header: {
     fontSize: 24,
@@ -137,11 +169,27 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
+  cardPortrait: {
+    flexDirection: "column",
+  },
+  cardLandscape: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
   vacationImage: {
-    width: "100%",
-    height: 150,
     borderRadius: 12,
+  },
+  imagePortrait: {
+    width: "100%",
+    aspectRatio: 16 / 9,
     marginBottom: 12,
+  },
+  imageLandscape: {
+    width: "40%",
+    aspectRatio: 16 / 9,
+  },
+  textScroll: {
+    flex: 1,
   },
   cardTitle: {
     fontSize: 20,

@@ -1,18 +1,32 @@
-import React, { useEffect, useState, useContext } from "react";
-import { View, Text, StyleSheet, Button, ScrollView, Alert } from "react-native";
+import { useEffect, useState, useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  ScrollView,
+  Alert,
+} from "react-native";
 import Layout from "../components/Layout";
 import { saveSettings } from "../utils/settings";
 import { SettingsContext } from "../context/SettingsContext";
 import { Picker } from "@react-native-picker/picker";
-
+import { useWindowDimensions } from "react-native";
 export default function SettingsScreen() {
-  const { region, setRegion, schoolYear, setSchoolYear, loaded } = useContext(SettingsContext);
+  const { region, setRegion, schoolYear, setSchoolYear, loaded } =
+    useContext(SettingsContext);
   const [localRegion, setLocalRegion] = useState(region);
   const [localSchoolYear, setLocalSchoolYear] = useState(schoolYear);
 
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
+
   const regions = ["noord", "midden", "zuid"];
   const currentYear = new Date().getFullYear();
-  const schoolYears = Array.from({ length: 5 }, (_, i) => `${currentYear + i}-${currentYear + i + 1}`);
+  const schoolYears = Array.from(
+    { length: 5 },
+    (_, i) => `${currentYear + i}-${currentYear + i + 1}`
+  );
 
   useEffect(() => {
     if (loaded) {
@@ -35,18 +49,31 @@ export default function SettingsScreen() {
 
   return (
     <Layout>
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          { paddingTop: isLandscape ? 16 : 80 },
+        ]}
+      >
         <Text style={styles.header}>Settings</Text>
 
         <Text style={styles.label}>Region:</Text>
-        <Picker selectedValue={localRegion} onValueChange={setLocalRegion} style={styles.picker}>
+        <Picker
+          selectedValue={localRegion}
+          onValueChange={setLocalRegion}
+          style={styles.picker}
+        >
           {regions.map((r) => (
             <Picker.Item key={r} label={r} value={r} />
           ))}
         </Picker>
 
         <Text style={styles.label}>School Year:</Text>
-        <Picker selectedValue={localSchoolYear} onValueChange={setLocalSchoolYear} style={styles.picker}>
+        <Picker
+          selectedValue={localSchoolYear}
+          onValueChange={setLocalSchoolYear}
+          style={styles.picker}
+        >
           {schoolYears.map((sy) => (
             <Picker.Item key={sy} label={sy} value={sy} />
           ))}
