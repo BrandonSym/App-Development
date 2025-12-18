@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import * as NavigationBar from "expo-navigation-bar";
+import TabNavigator from "./src/navigation/TabNavigator";
+import { SettingsProvider } from "./src/context/SettingsContext";
 
 export default function App() {
+  useEffect(() => {
+    // Hide the system navigation bar
+    NavigationBar.setVisibilityAsync("hidden");
+
+    // Set behavior so users can swipe up to reveal it
+    NavigationBar.setBehaviorAsync("overlay-swipe");
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SettingsProvider>
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
+    </SettingsProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
