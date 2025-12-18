@@ -29,9 +29,6 @@ export const loadSettings = async () => {
   }
 };
 
-// -------------------- Defaults --------------------
-
-// Get default region from GPS
 export const getDefaultRegion = async () => {
   try {
     const { status } = await Location.requestForegroundPermissionsAsync();
