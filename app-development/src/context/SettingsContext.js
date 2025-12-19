@@ -23,7 +23,6 @@ export const SettingsProvider = ({ children }) => {
     setLoaded(true);
   };
 
-  // 👇 NEW: manual re-sync function
   const syncRegion = async () => {
     const detectedRegion = await getDefaultRegion();
     setRegion(detectedRegion);
@@ -49,7 +48,7 @@ export const SettingsProvider = ({ children }) => {
         schoolYear,
         setSchoolYear,
         loaded,
-        syncRegion, // 👈 exposed to screens
+        syncRegion,
       }}
     >
       {children}
