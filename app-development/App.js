@@ -6,10 +6,8 @@ import { SettingsProvider } from "./src/context/SettingsContext";
 
 export default function App() {
   useEffect(() => {
-    // Hide the system navigation bar
     NavigationBar.setVisibilityAsync("hidden");
 
-    // Set behavior so users can swipe up to reveal it
     NavigationBar.setBehaviorAsync("overlay-swipe");
   }, []);
 

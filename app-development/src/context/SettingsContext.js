@@ -1,5 +1,10 @@
-import { createContext, useState, useEffect } from 'react';
-import { loadSettings, getDefaultRegion, getDefaultSchoolYear } from '../utils/settings';
+import { createContext, useState, useEffect } from "react";
+import {
+  loadSettings,
+  saveSettings,
+  getDefaultRegion,
+  getDefaultSchoolYear,
+} from "../utils/settings";
 
 export const SettingsContext = createContext();
 
@@ -18,6 +23,20 @@ export const SettingsProvider = ({ children }) => {
     setLoaded(true);
   };
 
+  // 👇 NEW: manual re-sync function
+  const syncRegion = async () => {
+    const detectedRegion = await getDefaultRegion();
+    setRegion(detectedRegion);
+
+    const saved = await loadSettings();
+    await saveSettings({
+      ...saved,
+      region: detectedRegion,
+    });
+
+    return detectedRegion;
+  };
+
   useEffect(() => {
     loadDefaults();
   }, []);
@@ -30,6 +49,7 @@ export const SettingsProvider = ({ children }) => {
         schoolYear,
         setSchoolYear,
         loaded,
+        syncRegion, // 👈 exposed to screens
       }}
     >
       {children}

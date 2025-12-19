@@ -13,7 +13,7 @@ import { SettingsContext } from "../context/SettingsContext";
 import { Picker } from "@react-native-picker/picker";
 import { useWindowDimensions } from "react-native";
 export default function SettingsScreen() {
-  const { region, setRegion, schoolYear, setSchoolYear, loaded } =
+  const { region, setRegion, schoolYear, setSchoolYear, loaded, syncRegion } =
     useContext(SettingsContext);
   const [localRegion, setLocalRegion] = useState(region);
   const [localSchoolYear, setLocalSchoolYear] = useState(schoolYear);
@@ -58,6 +58,17 @@ export default function SettingsScreen() {
         <Text style={styles.header}>Settings</Text>
 
         <Text style={styles.label}>Region:</Text>
+        <View style={{ marginBottom: 24 }}>
+          <Button
+            title="Detect Region Automatically"
+            onPress={async () => {
+              const detected = await syncRegion();
+              setLocalRegion(detected);
+              Alert.alert("Region updated", `Detected region: ${detected}`);
+            }}
+          />
+        </View>
+
         <Picker
           selectedValue={localRegion}
           onValueChange={setLocalRegion}
